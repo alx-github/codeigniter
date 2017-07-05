@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=mysql; dbname=project1; charset=utf8;',
+	'dsn'	=> 'mysql:host=project1_mysql; dbname=project1; charset=utf8;',
 	'hostname' => '',
 	'username' => 'root',
 	'password' => 'form_manager',

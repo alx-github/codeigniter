@@ -1,4 +1,4 @@
-mysql:
+project1_mysql:
   build: ./mysql
   environment:
     - MYSQL_ROOT_PASSWORD=form_manager
@@ -7,14 +7,14 @@ mysql:
     - "3306:3306"
   volumes:
     - ./mysql/initdb.d:/docker-entrypoint-initdb.d
-  container_name: mysql
+  container_name: project1_mysql
 
-web:
+project1_web:
   build: ./php
   ports:
     - "80:80"
   volumes:
     - ../www:/var/www
   links:
-    - mysql
+    - project1_mysql
   container_name: project1_web
