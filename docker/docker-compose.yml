@@ -7,7 +7,7 @@ mysql:
     - "3306:3306"
   volumes:
     - ./mysql/initdb.d:/docker-entrypoint-initdb.d
-  container_name: project1_mysql
+  container_name: mysql
 
 web:
   build: ./php

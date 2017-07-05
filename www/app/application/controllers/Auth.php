@@ -12,7 +12,7 @@ class Auth extends CI_Controller {
         $this->load->database();
         $this->load->library(array('form_validation','session'));
         $this->load->helper(array('language','form','common'));
-        
+          
     }   
 
     public function index()
@@ -22,13 +22,18 @@ class Auth extends CI_Controller {
 
     public function login()
     {
-        // check post method
+        
+
         if($this->input->post())
         {
             $this->verify_login();
         }
         else
         {
+            if($this->session->userdata('login_id'))
+            {
+                redirect('/manage');
+            }
             $this->render_login();
         }
     }
@@ -37,8 +42,7 @@ class Auth extends CI_Controller {
     
     private function verify_login()
     {
-        $this->data['login_id'] =  $this->input->post('login_id');
-        $this->data['password'] =  $this->input->post('password');
+        
        
         $this->form_validation->set_rules('login_id','ID','trim|required|regex_match[/^[a-zA-Z0-9_\-]+$/]');
         $this->form_validation->set_rules('password','password','trim|required|regex_match[/^[a-zA-Z0-9_\-]+$/]');
@@ -48,6 +52,8 @@ class Auth extends CI_Controller {
             $this->render_login();
             return;
         }
+        $this->data['login_id'] =  $this->input->post('login_id');
+        $this->data['password'] =  $this->input->post('password');
        
         $password_hash = hash_password($this->data['password']);
         $this->load->model('accounts_model');
@@ -60,7 +66,8 @@ class Auth extends CI_Controller {
             return;
         }
         
-        $this->session->set_userdata('account_id', $result->id);
+        $this->session->set_userdata('account_id',$result->id);
+        $this->session->set_userdata('login_id', $result->id);
         redirect('/manage');
 
     }
@@ -71,5 +78,15 @@ class Auth extends CI_Controller {
 		$this->load->view('auth/form_login',$this->data);
 		$this->load->view('templates/footer');
 	} 
+
+
+
+    private function render_logout()
+    {
+        $this->session->unset_userdata('login_id');
+        $this->session->unset_userdata('account_id');
+        $this->session->sess_destroy();
+        redirect('/auth');
+    }
 
 }
