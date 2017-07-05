@@ -23,7 +23,6 @@ class Manage extends MY_Controller {
 		if($this->session->userdata('login_id'))
 		{
 			$this->render_list_accounts();
-
 		}
 		else
 		{
@@ -35,6 +34,9 @@ class Manage extends MY_Controller {
 
 	private function render_list_accounts()
 	{
+		// $this->load->model('account_model');
+		// $list_accounts = $this->account_model->loadAll();
+
 		$this->load->view('templates/header');
 	 	$this->load->view('manage/list_accounts');
 	 	$this->load->view('templates/footer');

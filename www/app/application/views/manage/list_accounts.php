@@ -11,25 +11,43 @@
 		<div class="col-md-12">
 			<div class="pull-right"> 
 				<a href="<?= site_url('/account/create') ?>">
-					<div class="btn btn-primary">
+					<div class="btn btn-info">
 						新しいアカウントを登録する
 					</div>
 				</a>
 			</div>
-			<table class="table-responsive">
+		</div>
+	</div>
+	<div class="row">
+		<div class="table-responsive col-md-12">
+			<table class="table" cell-border="0">
 				<thead>
-					<tr>
-						<th></th>
-						<th></th>
-						<th></th>
+					<tr style="font-weight: bold;">
+						<th>アカウンID</th>
+						<th>権限</th>
+						<th>管理ブランド</th>
+						<th>最終ログイン日時</th>
 						<th></th>
 					</tr>
 				</thead>
-				<tbody>
-					
+				<tbody style="background-color: white; ">
+					<tr>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+					</tr>
 				</tbody>
 			</table>
-		</div>
+			</div>
 	</div>
 
 </div>

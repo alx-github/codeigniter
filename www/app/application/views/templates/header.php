@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 		<title>フォーム投稿管理システム</title>
-
+		<link href="<?= base_url('assets/css/main.css'); ?>" rel="stylesheet">
 		<!-- Bootstrap -->
 		<link href="<?= base_url('assets/umi/css/bootstrap.min.css'); ?>" rel="stylesheet">
 		<link href="<?= base_url('assets/umi/css/jquery-ui.min.css'); ?>" rel="stylesheet">
@@ -34,3 +34,12 @@
 	</head>
 </head>
 <body>
+<?php 
+	if($this->session->has_userdata('login_id')):
+	 ?>
+		
+		<div class="pull-right">
+	<a href="<?= site_url('/auth/logout') ?>">Logout</a>
+</div>
+
+<?php endif; ?>

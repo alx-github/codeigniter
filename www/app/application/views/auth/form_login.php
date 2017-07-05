@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				if($this->session->has_userdata('error_message')):
 			 ?>
 			<div class="alert alert-dismissable alert-danger">
-				<button type="btn" class="close" data-dismiss="alert">x</button>
+				
 				<h4>エラー</h4>
 				<p>
 					<?= $this->session->flashdata('error_message')?>	

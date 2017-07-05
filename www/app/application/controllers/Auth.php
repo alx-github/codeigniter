@@ -37,6 +37,10 @@ class Auth extends CI_Controller {
             $this->render_login();
         }
     }
+    public function logout()
+    {
+        $this->render_logout();
+    }
     
     
     

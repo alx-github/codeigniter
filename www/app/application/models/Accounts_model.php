@@ -35,4 +35,25 @@ class Accounts_model extends CI_Model{
 			
 	}
 
+	
+
+
+	public function loadAll()
+	{
+		// $result = $this->db->get($table_name);
+		// $this->db->trans_complete();
+		// if ( ! $result)
+		// {
+		// 	log_message('error', $this->db->error()['message']);
+		// 	return FALSE;
+		// }
+		// if (count($result->result()) === 0)
+		// {
+		// 	return FALSE;
+		// }
+		// return $result->result();
+
+
+	}
+
 }
