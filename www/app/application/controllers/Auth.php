@@ -22,7 +22,10 @@ class Auth extends CI_Controller {
 
     public function login()
     {
-        
+     if($this->session->userdata('login_id'))
+        {
+            redirect('/manage');
+        }
 
         if($this->input->post())
         {
@@ -30,13 +33,11 @@ class Auth extends CI_Controller {
         }
         else
         {
-            if($this->session->userdata('login_id'))
-            {
-                redirect('/manage');
-            }
+           
             $this->render_login();
         }
     }
+
     public function logout()
     {
         $this->render_logout();
@@ -71,7 +72,8 @@ class Auth extends CI_Controller {
         }
         
         $this->session->set_userdata('account_id',$result->id);
-        $this->session->set_userdata('login_id', $result->id);
+        $this->session->set_userdata('login_id', $result->login_id);
+        $this->session->set_userdata('type', $result->type);
         redirect('/manage');
 
     }
@@ -89,6 +91,7 @@ class Auth extends CI_Controller {
     {
         $this->session->unset_userdata('login_id');
         $this->session->unset_userdata('account_id');
+        $this->session->unset_userdata('type');
         $this->session->sess_destroy();
         redirect('/auth');
     }

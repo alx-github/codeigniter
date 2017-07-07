@@ -5,12 +5,9 @@ class Manage extends MY_Controller {
 	
 	public function __construct()
     {
-        parent::__construct();
-        $this->load->database();
+    	parent::__construct();
         $this->load->library(array('form_validation','session'));
         $this->load->helper(array('language','form','common'));
-	     
-     
       
     }   
 
@@ -18,11 +15,9 @@ class Manage extends MY_Controller {
 
 	public function index()
 	{
-		
-		
 		if($this->session->userdata('login_id'))
 		{
-			$this->render_list_accounts();
+			redirect('/account');
 		}
 		else
 		{
@@ -30,21 +25,5 @@ class Manage extends MY_Controller {
 		}
 		
 	}
-
-
-	private function render_list_accounts()
-	{
-		// $this->load->model('account_model');
-		// $list_accounts = $this->account_model->loadAll();
-
-		$this->load->view('templates/header');
-	 	$this->load->view('manage/list_accounts');
-	 	$this->load->view('templates/footer');
-	}
-
-
-
-
-
 	
 }
