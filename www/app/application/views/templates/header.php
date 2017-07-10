@@ -33,23 +33,6 @@
 		<script src="<?= base_url('assets/umi/js/jquery-ui-timepicker-addon.min.js'); ?>"></script>
 		<script src="<?= base_url('assets/umi/js/jquery-ui-timepicker-ja.js'); ?>"></script>
 		<style type="text/css">
-			.active-menu
-			{
-				background-color:#1A252F;
-				padding: 10px;
-
-			}
-			.passive-menu
-			{
-				padding: 10px;
-
-			}
-			.navbar
-			{
-				background-color: #2E3E51;
-				vertical-align: middle;
-				padding-bottom: 1%;
-			}	
 		</style>
 	</head>
 </head>
@@ -61,23 +44,23 @@
 <?php 
 	if($this->session->has_userdata('login_id')):
 	 ?>
-		<nav class="navbar navbar-inverse" >
+		<nav class="navbar navbar-default" >
 		<div class="container-fluid">
-			<ul class="navbar-nav navbar-brand">
+			<ul class="navbar-nav nav">
 		  	<?php if($current == 'account'): ?>
-		  		<li class="active-menu" role="presentation"><a href="<?= site_url('/account') ?>">アカウント管理 </a></li>
+		  		<li class="active" role="presentation"><a href="<?= site_url('/account') ?>">アカウント管理 </a></li>
 		  	<?php else: ?>
 		    	<li class="passive-menu"><a href="<?= site_url('/account') ?>">アカウント管理 </a></li>
 			<?php endif; ?>
 
 			<?php if($current == 'brand'): ?>
-		  		<li class="active-menu"><a href="<?= site_url('') ?>">アカウ</a></li>
+		  		<li class="active"><a href="<?= site_url('') ?>">アカウ</a></li>
 		  	<?php else: ?>
-		    	<li class="passive-menu"><a href="<?= site_url('') ?>">アカウ</a></li>
+		    	<li><a href="<?= site_url('') ?>">アカウ</a></li>
 			<?php endif; ?>	
 
 		  	</ul>
-		  <ul  class="navbar-nav navbar-brand navbar-right">
+		  <ul  class="navbar-nav nav navbar-right">
 		  	<li class="passive-menu">
 				<a  href="<?= site_url('/auth/logout') ?>">Logout</a>
 			</li>

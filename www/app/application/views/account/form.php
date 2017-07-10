@@ -2,7 +2,7 @@
 	<div class="row">
 		<ul class="breadcrumb">
 			<li><a href="<?= site_url('/account') ?>">アカウント管理</a></li>
-			<li class="active">'登録' : '更新'</li>
+			<li class="active"><?= empty($account) ? '登録' : '更新' ?></li>
 		</ul>
 	</div>
 	<div class="row">
@@ -43,7 +43,7 @@
 						</div>
 						<div class="col-md-5">
 							<?php if($account['login_id']): ?>
-								<input type="text" name="password" class=" form-control">
+								<input type="text" name="password" id="password" class=" form-control">
 							<?php else: ?>
 								<input type="text" name="password" id="password" class=" form-control" required="true">
 							<?php endif; ?>
@@ -101,28 +101,32 @@
 							<label for="type" class="col-md-offset-6 control-label">Brands</label>
 						</div>
 						<div class="col-md-8">
-						<?php if ($this->session->userdata('type') == 1): ?>
-							<?php foreach ($list_brands as $value): ?>
-								<?php if(!empty($account['brands'])): ?>
-									<?php if((in_array($value,$account['brands']))):?>
-										<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]" checked="true"><?=$value['brand_name']  ?></label>
+						<?php if ($list_brands): ?>
+							<?php if ($this->session->userdata('type') == 1): ?>
+
+								<?php foreach ($list_brands as $value): ?>
+									<?php if(!empty($account['brands'])): ?>
+										<?php if((in_array($value,$account['brands']))):?>
+											<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]" checked="true"><?=$value['brand_name']  ?></label>
+										<?php else: ?>
+											<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]"><?=$value['brand_name']  ?></label>
+										<?php endif; ?>
 									<?php else: ?>
 										<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]"><?=$value['brand_name']  ?></label>
 									<?php endif; ?>
-								<?php else: ?>
-									<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]"><?=$value['brand_name']  ?></label>
-								<?php endif; ?>
-							<?php endforeach; ?>
-						<?php else: ?>
-							<?php foreach ($list_brands as $value): ?>
-								<?php if(!empty($account['brands'])): ?>
-									<?php if((in_array($value,$account['brands']))):?>
-										<label class="checkbox-inline"><?=$value['brand_name']  ?></label>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<?php foreach ($list_brands as $value): ?>
+									<?php if(!empty($account['brands'])): ?>
+										<?php if((in_array($value,$account['brands']))):?>
+											<label class="checkbox-inline"><?=$value['brand_name']  ?></label>
+										<?php endif; ?>
 									<?php endif; ?>
-								<?php endif; ?>
-							<?php endforeach; ?>
-						<?php endif ?>
-							
+								<?php endforeach; ?>
+							<?php endif ?>
+						<?php else: ?>
+							<?php echo "Empty";  ?>
+						<?php endif; ?>
 						</div>
 					</div>
 
@@ -133,7 +137,8 @@
 					<button type="submit" class="col-md-offset-2 col-md-8 btn btn-info">update</button>
 					<br>
 					<br>
-					<?php if ($this->session->userdata('type') == 1): ?>
+					<?php if ($this->session->userdata('type') == 1 &&
+						 $this->session->userdata('login_id') !=  $account['login_id'] ): ?>
 						<div class="col-md-offset-2 col-md-8 btn btn-default" style="background-color:#ED8A80; " data-toggle="modal" data-target="#delete-modal">Delete</div>
 						<div class="col-md-10 col-md-offset-2">
 							<p class="text-warning">※ 一度削除したアカウントは元に戻すことはできません。</p>

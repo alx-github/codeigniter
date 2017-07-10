@@ -67,7 +67,7 @@
 								</td>
 								<td><?= $account->last_login ?></td>
 								<td>
-									<a href="<?= site_url('/account/edit/')?>?id=<?=$account->id?>">編集</a>
+									<a href="<?= site_url('/account/edit')?>?id=<?=$account->id?>">編集</a>
 								</td>
 							</tr>
 					 <?php endforeach; ?>	

@@ -25,7 +25,7 @@ class Brands_model extends CI_Model{
 			log_message('error', $this->db->error()['message']);
 			return FALSE;
 		}
-		if (count($result->result()) === 0)
+		if (count($result->result()) == 0)
 		{
 			return FALSE;
 		}

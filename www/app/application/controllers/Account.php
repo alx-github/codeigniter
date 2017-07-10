@@ -118,7 +118,7 @@ class Account extends MY_Controller {
 		}
 
 		$delete_id = $this->input->post('id');
-		if(empty($delete_id))
+		if(empty($delete_id) || $delete_id == $this->session->userdata('account_id') )
 		{
 			redirect('account');
 			return;
