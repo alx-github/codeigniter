@@ -73,7 +73,7 @@
 					 <?php endforeach; ?>	
 				</tbody>
 			</table>
-			<?php if($this->session->userdata('type') ==1 ): ?>
+			<?php if($this->session->userdata('type') ==1 && (sizeof($pagination['pages']) > 1 )): ?>
 			<nav aria-label="Page navigation" class="pull-right">
 				<ul class="pagination">
 				    <?php if($pagination['showFirstPage']): ?>

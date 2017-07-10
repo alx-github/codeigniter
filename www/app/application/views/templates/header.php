@@ -32,8 +32,6 @@
 		<script src="<?= base_url('assets/umi/js/jquery.timepicker.min.js'); ?>"></script>
 		<script src="<?= base_url('assets/umi/js/jquery-ui-timepicker-addon.min.js'); ?>"></script>
 		<script src="<?= base_url('assets/umi/js/jquery-ui-timepicker-ja.js'); ?>"></script>
-		<style type="text/css">
-		</style>
 	</head>
 </head>
 <body>

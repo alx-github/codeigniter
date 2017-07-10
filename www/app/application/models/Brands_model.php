@@ -32,6 +32,26 @@ class Brands_model extends CI_Model{
 		return $result->result_array();
 	}
 
+	public function load_list_id_brands()
+	{
+		$this->db->select('BR.id');
+		$this->db->from($this->table_brands. ' BR');
+		$this->db->where('deleted_at',null);
+		$result = $this->db->get();
+
+		$this->db->trans_complete();
+		if ( ! $result)
+		{
+			log_message('error', $this->db->error()['message']);
+			return FALSE;
+		}
+		if (count($result->result()) == 0)
+		{
+			return FALSE;
+		}
+		return $result->result_array();
+	}
+
 
 	public function load_brand_by_account($account_id)
 	{

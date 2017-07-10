@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Account extends MY_Controller {
 	
 	
-	protected $data;
+	protected $data = null;
 	protected $limit = 2;
 	protected $range = 2;
 	protected $pagination = [ 'pages' => null,
@@ -23,11 +23,6 @@ class Account extends MY_Controller {
 	public function __construct()
     {
         parent::__construct();
-        $this->load->database();
-        $this->load->library(array('form_validation','session'));
-        $this->load->helper(array('language','form','common'));
-	    $this->load->model('accounts_model');
-		$this->load->model('brands_model');
 		define('INSERT_MODE', 1);
 		define('UPDATE_MODE', 2);
      
@@ -38,6 +33,7 @@ class Account extends MY_Controller {
 
 	public function index()
 	{
+		parent::check_expired_account();
 		if($this->session->userdata('login_id'))
 		{	
 			if($this->session->userdata('type') == 1 )
@@ -77,10 +73,12 @@ class Account extends MY_Controller {
 
 	public function create()
 	{
+		parent::check_expired_account();
 		if($this->session->userdata('type') !=  1 )
 		{
 			redirect('/account');
 		}
+		print_r($this->data['account']['login_id']);
 		$this->data['account'] = $this->create_empty_account();
 		$this->data['list_brands'] = $this->brands_model->load_list_brands();
 		$this->render_form_account();
@@ -88,6 +86,7 @@ class Account extends MY_Controller {
 
 	public function edit()
 	{
+		parent::check_expired_account();
 		if($this->session->userdata('type') !=  1 )
 		{
 
@@ -107,11 +106,13 @@ class Account extends MY_Controller {
 		$current_account['brands']= $account_brands;
 		$this->data['account'] = $current_account;
 		$this->data['list_brands'] = $this->brands_model->load_list_brands();
+		$this->data['mode'] = UPDATE_MODE;
 		$this->render_form_account();
 	}
 
 	public function delete()
 	{
+		parent::check_expired_account();
 		if($this->session->userdata('type') !=  1 )
 		{
 			redirect('/account');
@@ -126,6 +127,7 @@ class Account extends MY_Controller {
 		$result = $this->accounts_model->delete_id($delete_id);
 		if($result)
 		{
+			
 			$this->session->set_flashdata('message','ユーザーを削除しました');
 			redirect('/account');
 		}
@@ -147,7 +149,6 @@ class Account extends MY_Controller {
 			if($this->accounts_model->get_account($this->input->post('login_id')))
 	        {
 	        	$this->session->set_flashdata('error_message','ID exists');
-	            redirect('/account/create');
 	            return false;
 	        }
 		}
@@ -158,8 +159,8 @@ class Account extends MY_Controller {
         if(!$this->form_validation->run())
         {
 
+
             $this->session->set_flashdata('error_message',validation_errors());
-            ($mode == INSERT_MODE)? redirect('/account/create'):redirect('/account/edit?id='.$this->input->post('id'));
             return false;
         }
 
@@ -169,25 +170,66 @@ class Account extends MY_Controller {
 
 	public function insert()
 	{
-		if($this->validate_form(INSERT_MODE) == false) return;
-
-        $this->data['account']['login_id'] =  $this->input->post('login_id');
+		parent::check_expired_account();
+	    $this->data['mode'] = INSERT_MODE;
+		$this->data['account']['login_id'] =  $this->input->post('login_id');
         $this->data['account']['password'] = hash_password($this->input->post('password')) ;
         $this->data['account']['type'] = $this->input->post('type');
+        $this->data['list_brands'] = $this->brands_model->load_list_brands();
+      
+		if($this->validate_form(INSERT_MODE) == false)
+		{
+			$this->data['account']['brands'] = $this->input->post('brands[]');
+			$this->render_form_account();
+			return;	
+		} 
+
+        
+
         $insert_id = $this->accounts_model->insert_account($this->data['account']);
-        $result = $this->brands_model->update_brands($insert_id, $this->input->post('brands[]'));
 
-        redirect('account');
-
+        $result= null;
+        if($this->data['account']['type'] == 1)
+        {
+        	$list_id_brands = $this->brands_model->load_list_id_brands();
+        	$list_all_brands=[];
+        	foreach ($list_id_brands as $key => $value)
+        	{
+        		$list_all_brands[$key] = $value['id'];
+        	}
+        	$result = $this->brands_model->update_brands($insert_id, $list_all_brands);
+        }
+        else
+        {
+        	$result = $this->brands_model->update_brands($insert_id, $this->input->post('brands[]'));
+        }
+       
+        if ($result)
+		{
+			$this->session->set_flashdata('message', "アカウント情報を更新しました");
+		}
+		else
+		{
+			$this->session->set_flashdata('error_message', 'アカウント情報を更新することができません');
+		}
+        redirect('/account');
 	}
 
 	public function update()
 	{
-
-		if($this->validate_form(UPDATE_MODE) == false) return;
+		parent::check_expired_account();
+		$this->data['mode'] = UPDATE_MODE;
 		$this->data['account']['id'] =  $this->input->post('id');
 		$this->data['account']['login_id'] =  $this->input->post('login_id');
-		$this->data['account']['type'] = $this->input->post('type');
+        $this->data['account']['password'] = hash_password($this->input->post('password')) ;
+        $this->data['account']['type'] = $this->input->post('type');
+        $this->data['list_brands'] = $this->brands_model->load_list_brands();
+		if($this->validate_form(UPDATE_MODE) == false)
+		{
+			$this->data['account']['brands'] = $this->input->post('brands[]');
+			$this->render_form_account();
+			return;	
+		} 
 		if($this->input->post('password'))
 		{
 			$this->data['account']['password'] = hash_password($this->input->post('password'));
@@ -202,11 +244,26 @@ class Account extends MY_Controller {
 
 		if($this->session->userdata('type') == 1)
 		{
-			 $result = $this->brands_model->update_brands($this->data['account']['id'], $this->input->post('brands[]'));
-			 if ($result)
+
+			$result= null;
+	        if($this->data['account']['type'] == 1)
+	        {
+	        	$list_id_brands = $this->brands_model->load_list_id_brands();
+	        	$list_all_brands=[];
+	        	foreach ($list_id_brands as $key => $value)
+	        	{
+	        		$list_all_brands[$key] = $value['id'];
+	        	}
+	        	$result = $this->brands_model->update_brands($this->data['account']['id'], $list_all_brands);
+	        }
+	        else
+	        {
+	        	$result = $this->brands_model->update_brands($this->data['account']['id'], $this->input->post('brands[]'));
+	        }
+	       
+	        if ($result)
 			{
 				$this->session->set_flashdata('message', "アカウント情報を更新しました");
-				redirect('/account');
 			}
 			else
 			{

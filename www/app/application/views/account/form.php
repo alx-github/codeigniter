@@ -21,17 +21,21 @@
 			</div>
 
 		<?php endif; ?>
-			<form class="form-horizontal" action="<?=site_url( (empty($account['id'])) ? '/account/insert' : 'account/update' )  ?>" method="POST">
+			<form id="account_form" class="form-horizontal" action="<?=site_url( (empty($account['id'])) ? '/account/insert' : 'account/update' )  ?>" method="POST">
 				<fieldset class="well" style="border-radius: 5px;">
 					<div class="form-group">
 						<div class="col-md-2 text-right">
 							<label for="login_id" class="col-md-offset-6 control-label">ID</label>
 						</div>
 						<div class="col-md-8">
-						<?php if($account['login_id']): ?>
+					<?php if($account['login_id']): ?>
+						<?php if ($mode == INSERT_MODE): ?>
+							<input type="text" name="login_id" class="  form-control" required="true" value="<?=$account['login_id']?>">			
+						<?php else: ?>
 							<input type="hidden" name="id" class="  form-control" required="true" readonly="true" value="<?=$account['id']?>">
-							<input type="text" name="login_id" class="  form-control" required="true" readonly="true" value="<?=$account['login_id']?>">
-						
+							<input type="text" name="login_id" class="  form-control" required="true" readonly="true" value="<?=$account['login_id']?>">						
+						<?php endif ?>
+							
 					<?php else: ?>
 							<input type="text" name="login_id" class="  form-control" required="true">
 					<?php endif; ?>
@@ -67,7 +71,7 @@
 							<?php if($account['login_id']): ?>
 									<?php if($account['type'] == 1): ?>
 									   <div class="radio">
-								      		<label ><input type="radio" name="type" value="1" checked="true">Admin</label>
+								      		<label><input type="radio" name="type" value="1" checked="true">Admin</label>
 								  		</div>
 							   			<div class="radio">
 									      <label><input type="radio" name="type" value="0" >User</label>
@@ -96,17 +100,17 @@
 												
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" id="list_brands">
 						<div class="col-md-2 text-right">
 							<label for="type" class="col-md-offset-6 control-label">Brands</label>
 						</div>
-						<div class="col-md-8">
+						<div class="col-md-8" id="list_brands">
 						<?php if ($list_brands): ?>
 							<?php if ($this->session->userdata('type') == 1): ?>
 
 								<?php foreach ($list_brands as $value): ?>
 									<?php if(!empty($account['brands'])): ?>
-										<?php if((in_array($value,$account['brands']))):?>
+										<?php if((in_array($value['id'],$account['brands'])) || (in_array($value,$account['brands']))):?>
 											<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]" checked="true"><?=$value['brand_name']  ?></label>
 										<?php else: ?>
 											<label class="checkbox-inline"><input type="checkbox" value="<?=$value['id']  ?>" name="brands[]"><?=$value['brand_name']  ?></label>
@@ -124,8 +128,6 @@
 									<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif ?>
-						<?php else: ?>
-							<?php echo "Empty";  ?>
 						<?php endif; ?>
 						</div>
 					</div>

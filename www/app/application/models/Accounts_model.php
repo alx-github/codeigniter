@@ -57,6 +57,7 @@ class Accounts_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from($this->table_name);
 		$this->db->where('id',$id);
+		$this->db->where('deleted_at',null);
 		$result = $this->db->get();
 
 		$this->db->trans_complete();
@@ -95,11 +96,12 @@ class Accounts_model extends CI_Model{
 		}
 		$update_last_login_result = $this->update_data($result->result()[0]->id,['last_login' => date('Y-m-d H:i:s')]); 
 
+
+	
+
 		return $result->result()[0];
 			
 	}
-
-
 
 	public function get_quantity_of_accounts()
 	{
